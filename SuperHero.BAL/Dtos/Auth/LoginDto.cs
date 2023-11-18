@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
+using SuperHero.Helper;
 
 namespace SuperHero.BAL;
 
@@ -32,10 +33,6 @@ public static class LoginDtoExtensions
    {
       var validator = new LoginDtoValidator(userManager);
       var result = await validator.ValidateAsync(model);
-      var errors = result.Errors.Select(x => x.ErrorMessage);
-      return JsonSerializer.Serialize(errors, new JsonSerializerOptions
-      {
-         WriteIndented = true,
-      }).Replace("\r\n", "\n");
+      return SerializationUtility.SerializeErrors(result.Errors);
    }
 }

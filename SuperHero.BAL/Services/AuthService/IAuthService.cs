@@ -5,6 +5,6 @@ namespace SuperHero.BAL;
 
 public interface IAuthService
 {
-   Task<ResponseResult<IdentityUser>> RegisterAsync(RegisterDto registerDto);
-   Task<ResponseResult<String>> LoginAsync(LoginDto loginDto);
+   Task<String> RegisterAsync(RegisterDto registerDto);
+   Task<String> LoginAsync(LoginDto loginDto);
 }
