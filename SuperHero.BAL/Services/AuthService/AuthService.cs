@@ -2,7 +2,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using SuperHero.BAL.Dtos;
 using SuperHero.Helper;
 
@@ -31,13 +30,13 @@ public class AuthService : IAuthService
       _authToken = authToken;
    }
 
-   public async Task<ResponseResult<IdentityUser>> RegisterAsync(RegisterDto registerDto)
+   public async Task<String> RegisterAsync(RegisterDto registerDto)
    {
       var validationResult = await _registerDtoValidator.ValidateAsync(registerDto);
       if (!validationResult.IsValid)
       {
-         var errors = validationResult.Errors.Select(error => error.ErrorMessage);
-         return ResponseResult<IdentityUser>.Fail(errors);
+         var validationErrorJson = ResponseHelper.FluentValidationErrorResponse(validationResult.Errors);
+         return validationErrorJson;
       }
 
       var user = _mapper.Map<IdentityUser>(registerDto);
@@ -45,16 +44,17 @@ public class AuthService : IAuthService
       await _userManager.CreateAsync(user, registerDto.Password);
       await _userManager.AddToRoleAsync(user, StaticUserRoles.User);
 
-      return ResponseResult<IdentityUser>.Success(user);
+      var successResponseJson = ResponseHelper.FluentValidationSuccessResponse("Registration successful");
+      return successResponseJson;
    }
 
-   public async Task<ResponseResult<String>> LoginAsync(LoginDto loginDto)
+   public async Task<String> LoginAsync(LoginDto loginDto)
    {
       var validationResult = await _loginDtoValidator.ValidateAsync(loginDto);
       if (!validationResult.IsValid)
       {
-         var errors = validationResult.Errors.Select(error => error.ErrorMessage);
-         return ResponseResult<String>.Fail(errors);
+         var validationErrorJson = ResponseHelper.FluentValidationErrorResponse(validationResult.Errors);
+         return validationErrorJson;
       }
 
       var user = await _userManager.FindByNameAsync(loginDto.UserName);
@@ -68,9 +68,7 @@ public class AuthService : IAuthService
       var authClaims = _authToken.GetAuthClaims(user.UserName, user.Id, roles);
       var token = _authToken.GenerateNewJsonWebTokenToken(authClaims);
 
-      var response = new { token = token };
-      var jsonResponse = JsonConvert.SerializeObject(response);
-
-      return ResponseResult<String>.Success(jsonResponse);
+      var successResponseJson = ResponseHelper.FluentValidationSuccessResponse(token);
+      return successResponseJson;
    }
 }

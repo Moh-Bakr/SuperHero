@@ -58,6 +58,8 @@ builder.Services.AddTransient(typeof(IResponseResult<>), typeof(ResponseResult<>
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthToken, AuthToken>();
+builder.Services.AddScoped<ISuperHeroService, SuperHeroService>();
+builder.Services.AddScoped<ISuperHeroServiceHelper, SuperHeroServiceHelper>();
 
 #endregion
 
@@ -75,6 +77,12 @@ builder.Services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
 builder.Services.AddTransient<IValidator<RegisterDto>, RegisterDtoValidator>();
 builder.Services.AddTransient<IValidator<LoginDto>, LoginDtoValidator>();
 
+builder.Services.AddValidatorsFromAssemblyContaining<SuperHeroSearchDto>();
+builder.Services.AddTransient<IValidator<SuperHeroSearchDto>, SuperHeroSearchDtoValidator>();
+
+builder.Services.AddValidatorsFromAssemblyContaining<SuperHeroDetailsDto>();
+builder.Services.AddTransient<IValidator<SuperHeroDetailsDto>, SuperHeroDetailsDtoValidator>();
+
 #endregion
 
 #region Database Seeder
@@ -86,6 +94,7 @@ builder.Services.AddScoped<IRolesSeeder, RolesSeeder>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

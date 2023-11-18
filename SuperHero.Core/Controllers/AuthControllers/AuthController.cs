@@ -1,8 +1,7 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 using SuperHero.BAL;
 using SuperHero.BAL.Dtos;
+using SuperHero.Helper;
 
 namespace SuperHero.Core.Controllers;
 
@@ -17,36 +16,27 @@ public class AuthController : ControllerBase
       _authService = authService;
    }
 
-   [HttpPost("register")]
+   [HttpPost]
+   [Route("register")]
    public async Task<IActionResult> Register(RegisterDto registerDto)
    {
       var registrationResult = await _authService.RegisterAsync(registerDto);
-
-      if (!registrationResult.Succeeded)
+      if (registrationResult.Contains("errors"))
       {
-         return BadRequest(registrationResult.Errors);
+         return ResponseHelper.ContentResultErrorResponse(registrationResult);
       }
 
-      return new ContentResult
-      {
-         Content = "User Registered Successfully",
-         StatusCode = StatusCodes.Status201Created
-      };
+      return ResponseHelper.ContentResultSuccessResponse(registrationResult);
    }
 
-   [HttpPost("login")]
+   [HttpPost]
+   [Route("login")]
    public async Task<IActionResult> Login(LoginDto loginDto)
    {
       var loginResult = await _authService.LoginAsync(loginDto);
 
       if (loginResult is null) return Unauthorized("Invalid Credentials");
 
-
-      return new ContentResult
-      {
-         Content = loginResult.Data,
-         StatusCode = StatusCodes.Status200OK,
-         ContentType = "application/json"
-      };
+      return ResponseHelper.ContentResultSuccessResponse(loginResult);
    }
 }
