@@ -3,6 +3,7 @@ using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SuperHero.BAL;
@@ -17,7 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
    .AddEntityFrameworkStores<ApplicationDbContext>()
    .AddDefaultTokenProviders();
 
@@ -60,6 +61,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthToken, AuthToken>();
 builder.Services.AddScoped<ISuperHeroService, SuperHeroService>();
 builder.Services.AddScoped<ISuperHeroServiceHelper, SuperHeroServiceHelper>();
+builder.Services.AddScoped<IFavoriteListService, FavoriteListService>();
 
 #endregion
 
@@ -82,6 +84,12 @@ builder.Services.AddTransient<IValidator<SuperHeroSearchDto>, SuperHeroSearchDto
 
 builder.Services.AddValidatorsFromAssemblyContaining<SuperHeroDetailsDto>();
 builder.Services.AddTransient<IValidator<SuperHeroDetailsDto>, SuperHeroDetailsDtoValidator>();
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateFavoriteListDto>();
+builder.Services.AddTransient<IValidator<CreateFavoriteListDto>, FavoriteListDtoValidator>();
+
+builder.Services.AddValidatorsFromAssemblyContaining<DeleteFavoriteListDto>();
+builder.Services.AddTransient<IValidator<DeleteFavoriteListDto>, DeleteFavoriteListDtoDtoValidator>();
 
 #endregion
 

@@ -3,13 +3,14 @@ using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using SuperHero.BAL.Dtos;
+using SuperHero.DAL;
 using SuperHero.Helper;
 
 namespace SuperHero.BAL;
 
 public class AuthService : IAuthService
 {
-   private readonly UserManager<IdentityUser> _userManager;
+   private readonly UserManager<ApplicationUser> _userManager;
    private readonly RoleManager<IdentityRole> _roleManager;
    private readonly IValidator<RegisterDto> _registerDtoValidator;
    private readonly IValidator<LoginDto> _loginDtoValidator;
@@ -17,7 +18,7 @@ public class AuthService : IAuthService
    private readonly IConfiguration _configuration;
    private readonly IMapper _mapper;
 
-   public AuthService(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager,
+   public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager,
       IConfiguration configuration, IMapper mapper, IValidator<RegisterDto> registerDtoValidator,
       IValidator<LoginDto> loginDtoValidator, IAuthToken authToken)
    {
@@ -39,7 +40,7 @@ public class AuthService : IAuthService
          return validationErrorJson;
       }
 
-      var user = _mapper.Map<IdentityUser>(registerDto);
+      var user = _mapper.Map<ApplicationUser>(registerDto);
 
       await _userManager.CreateAsync(user, registerDto.Password);
       await _userManager.AddToRoleAsync(user, StaticUserRoles.User);

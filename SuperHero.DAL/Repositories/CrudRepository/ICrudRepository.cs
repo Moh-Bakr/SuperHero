@@ -5,12 +5,11 @@ namespace SuperHero.DAL;
 public interface ICrudRepository<T> where T : class
 {
    Task<T> AddAsync(T entity);
-   Task<T> UpdateAsync(T entity);
    Task<bool> DeleteAsync(int id);
 
-   Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, object>> orderBy, int page = 1,
-      int size = 10);
+   Task<IEnumerable<T>> GetByIdAsync(String id, string columnName, int pageNumber, int pageSize,
+      Expression<Func<T, object>> orderBy = null);
 
-   Task<T> GetByIdAsync(int id);
-   Task<T> FindAsync(Expression<Func<T, bool>> match);
+   bool FindValuesByExpressionAsync(Expression<Func<T, bool>> predicate);
+   Task<T> FindByIdAsync(int id);
 }
