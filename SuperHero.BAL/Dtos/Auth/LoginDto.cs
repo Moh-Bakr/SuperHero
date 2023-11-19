@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
+using SuperHero.DAL;
 using SuperHero.Helper;
 
 namespace SuperHero.BAL;
@@ -14,9 +15,9 @@ public class LoginDto
 
 public class LoginDtoValidator : AbstractValidator<LoginDto>
 {
-   private readonly UserManager<IdentityUser> _userManager;
+   private readonly UserManager<ApplicationUser> _userManager;
 
-   public LoginDtoValidator(UserManager<IdentityUser> userManager)
+   public LoginDtoValidator(UserManager<ApplicationUser> userManager)
    {
       _userManager = userManager;
       {
@@ -29,7 +30,7 @@ public class LoginDtoValidator : AbstractValidator<LoginDto>
 public static class LoginDtoExtensions
 {
    public static async Task<string> ValidateToJsonAsync(this LoginDto model,
-      UserManager<IdentityUser> userManager)
+      UserManager<ApplicationUser> userManager)
    {
       var validator = new LoginDtoValidator(userManager);
       var result = await validator.ValidateAsync(model);

@@ -2,6 +2,7 @@
 using System.Text.Json;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
+using SuperHero.DAL;
 using SuperHero.Helper;
 
 namespace SuperHero.BAL.Dtos;
@@ -16,9 +17,9 @@ public class RegisterDto
 
 public class RegisterDtoValidator : AbstractValidator<RegisterDto>
 {
-   private readonly UserManager<IdentityUser> _userManager;
+   private readonly UserManager<ApplicationUser> _userManager;
 
-   public RegisterDtoValidator(UserManager<IdentityUser> userManager)
+   public RegisterDtoValidator(UserManager<ApplicationUser> userManager)
    {
       _userManager = userManager;
       RuleFor(x => x.UserName)
@@ -61,7 +62,7 @@ public class RegisterDtoValidator : AbstractValidator<RegisterDto>
 public static class RegisterDtoModelExtensions
 {
    public static async Task<string> ValidateToJsonAsync(this RegisterDto model,
-      UserManager<IdentityUser> userManager)
+      UserManager<ApplicationUser> userManager)
    {
       var validator = new RegisterDtoValidator(userManager);
       var result = await validator.ValidateAsync(model);

@@ -4,11 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SuperHero.DAL;
 
-public class ApplicationDbContext : IdentityDbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
    {
    }
+
+   public DbSet<FavoriteListModel> FavoriteList { get; set; }
 
    protected override void OnModelCreating(ModelBuilder modelBuilder)
    {
@@ -22,5 +24,7 @@ public class ApplicationDbContext : IdentityDbContext
       });
 
       #endregion
+
+      modelBuilder.ApplyConfiguration(new FavoriteListModelConfig());
    }
 }

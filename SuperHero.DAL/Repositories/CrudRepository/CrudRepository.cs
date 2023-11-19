@@ -12,18 +12,13 @@ public class CrudRepository<T> : ICrudRepository<T> where T : class
       _context = context;
    }
 
-   # region Create, Update, Delete methods
+   # region Create,Delete methods
 
    public async Task<T> AddAsync(T entity)
    {
       await _context.Set<T>().AddAsync(entity);
       await _context.SaveChangesAsync();
       return entity;
-   }
-
-   public async Task<T> UpdateAsync(T entity)
-   {
-      throw new NotImplementedException();
    }
 
    public async Task<bool> DeleteAsync(int id)
@@ -40,32 +35,44 @@ public class CrudRepository<T> : ICrudRepository<T> where T : class
 
    # region Get methods
 
-   public async Task<IEnumerable<T>> GetAllAsync(
-      Expression<Func<T, object>> orderBy = null,
-      int page = 1,
-      int size = 10)
+   public async Task<IEnumerable<T>> GetByIdAsync(
+      String id,
+      string columnName,
+      int pageNumber,
+      int pageSize,
+      Expression<Func<T, object>> orderBy = null)
    {
-      page = Math.Max(page, 1);
-      size = Math.Max(1, Math.Min(size, 10));
+      pageNumber = Math.Max(1, pageNumber);
+      pageSize = Math.Max(1, Math.Min(pageSize, 10));
+
       IQueryable<T> query = _context.Set<T>();
+
+      query = query.Where(entity => EF.Property<T>(entity, columnName).Equals(id));
 
       if (orderBy != null)
       {
          query = query.OrderBy(orderBy);
       }
+      else
+      {
+         query = query.OrderBy(entity => EF.Property<T>(entity, columnName));
+      }
 
-      int skip = (page - 1) * size;
-
-      query = query.Skip(skip).Take(size);
+      int skip = (pageNumber - 1) * pageSize;
+      query = query.Skip(skip).Take(pageSize);
 
       return await query.ToListAsync();
    }
 
+   public bool FindValuesByExpressionAsync(Expression<Func<T, bool>> predicate)
+   {
+      return _context.Set<T>().Any(predicate);
+   }
 
-   public async Task<T> GetByIdAsync(int id) => await _context.Set<T>().FindAsync(id).AsTask();
-
-   public async Task<T> FindAsync(Expression<Func<T, bool>> match) =>
-      await _context.Set<T>().FirstOrDefaultAsync(match);
+   public async Task<T> FindByIdAsync(int id)
+   {
+      return await _context.Set<T>().FirstOrDefaultAsync(e => EF.Property<T>(e, "Id").Equals(id));
+   }
 
    # endregion
 }

@@ -18,28 +18,26 @@ public class SuperHeroController : ControllerBase
    }
 
    [HttpGet]
-   [Route("search")]
+   [Route("Search")]
    public async Task<IActionResult> SearchAsync([FromQuery] SuperHeroSearchDto searchDto)
    {
       var searchResult = await _superHeroService.SearchAsync(searchDto);
-      if (searchResult.Contains("error"))
-      {
-         return ResponseHelper.ContentResultErrorResponse(searchResult);
-      }
+      // bool isSuccessResponse = ResponseType.IsSuccessResponse(searchResult);
 
-      return ResponseHelper.ContentResultSuccessResponse(searchResult);
+      // if (isSuccessResponse) return Ok(searchResult);
+
+      return Ok(searchResult);
    }
 
    [HttpGet]
-   [Route("details")]
+   [Route("Details")]
    public async Task<IActionResult> DetailsAsync([FromQuery] SuperHeroDetailsDto detailsDto)
    {
       var detailsResult = await _superHeroService.DetailsAsync(detailsDto);
-      if (detailsResult.Contains("error"))
-      {
-         return ResponseHelper.ContentResultErrorResponse(detailsResult);
-      }
+      // bool isSuccessResponse = ResponseType.IsSuccessResponse(detailsResult);
 
-      return ResponseHelper.ContentResultSuccessResponse(detailsResult);
+      // if (isSuccessResponse) return Ok(detailsResult);
+
+      return Ok(detailsResult);
    }
 }

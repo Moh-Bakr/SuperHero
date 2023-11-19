@@ -1,4 +1,4 @@
-﻿namespace SuperHero.Helper;
+﻿namespace SuperHero.DAL;
 
 public class BaseModel
 {
