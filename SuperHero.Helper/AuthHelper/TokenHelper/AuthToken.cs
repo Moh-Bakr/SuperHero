@@ -36,10 +36,11 @@ namespace SuperHero.Helper.AuthHelper.TokenHelper
       public string GenerateNewJsonWebTokenToken(List<Claim> claims)
       {
          var jwtKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
+         double jwtExpireDays = Convert.ToDouble(_configuration["JWT:ExpireDays"]);
          var token = new JwtSecurityToken(
             issuer: _configuration["JWT:Issuer"],
             audience: _configuration["JWT:Audience"],
-            expires: DateTime.Now.AddHours(12),
+            expires: DateTime.Now.AddDays(jwtExpireDays),
             claims: claims,
             signingCredentials: new SigningCredentials(
                jwtKey, SecurityAlgorithms.HmacSha256)
