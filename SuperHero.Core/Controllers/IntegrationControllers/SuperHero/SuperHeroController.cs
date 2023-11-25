@@ -22,11 +22,11 @@ public class SuperHeroController : ControllerBase
    public async Task<IActionResult> SearchAsync([FromQuery] SuperHeroSearchDto searchDto)
    {
       var searchResult = await _superHeroService.SearchAsync(searchDto);
-      // bool isSuccessResponse = ResponseType.IsSuccessResponse(searchResult);
 
-      // if (isSuccessResponse) return Ok(searchResult);
+      bool isSuccessResponse = ResponseType.IsSuccessResponse(searchResult);
+      if (isSuccessResponse) return Ok(searchResult);
 
-      return Ok(searchResult);
+      return BadRequest(searchResult);
    }
 
    [HttpGet]
@@ -34,10 +34,10 @@ public class SuperHeroController : ControllerBase
    public async Task<IActionResult> DetailsAsync([FromQuery] SuperHeroDetailsDto detailsDto)
    {
       var detailsResult = await _superHeroService.DetailsAsync(detailsDto);
-      // bool isSuccessResponse = ResponseType.IsSuccessResponse(detailsResult);
 
-      // if (isSuccessResponse) return Ok(detailsResult);
+      bool isSuccessResponse = ResponseType.IsSuccessResponse(detailsResult);
+      if (isSuccessResponse) return Ok(detailsResult);
 
-      return Ok(detailsResult);
+      return BadRequest(detailsResult);
    }
 }

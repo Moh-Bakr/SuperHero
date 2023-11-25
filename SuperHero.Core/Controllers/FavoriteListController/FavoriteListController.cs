@@ -30,12 +30,13 @@ public class FavoriteListController : ControllerBase
 
       bool isSuccessResponse = ResponseType.IsSuccessResponse(response);
       if (isSuccessResponse) return ResponseHelper.ContentResultCreatedResponse(response);
+
       return BadRequest(response);
    }
 
    [HttpGet]
    [Route("GetByUserId")]
-   public async Task<IActionResult> GetAllByUserIdAsync(int pageNumber, int pageSize)
+   public async Task<IActionResult> GetAllByUserIdAsync([FromQuery] int pageNumber, int pageSize)
    {
       string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       if (userId is null) return Unauthorized();
@@ -47,7 +48,7 @@ public class FavoriteListController : ControllerBase
 
    [HttpDelete]
    [Route("Delete")]
-   public async Task<IActionResult> DeleteAsync(DeleteFavoriteListDto deleteFavoriteListDto)
+   public async Task<IActionResult> DeleteAsync([FromQuery] DeleteFavoriteListDto deleteFavoriteListDto)
    {
       string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       if (userId is null) return Unauthorized();
@@ -55,7 +56,8 @@ public class FavoriteListController : ControllerBase
       var response = await _favoriteListService.DeleteAsync(deleteFavoriteListDto, userId);
 
       bool isSuccessResponse = ResponseType.IsSuccessResponse(response);
-      if (isSuccessResponse) return ResponseHelper.ContentResultCreatedResponse(response);
+      if (isSuccessResponse) return Ok(response);
+
       return BadRequest(response);
    }
 }

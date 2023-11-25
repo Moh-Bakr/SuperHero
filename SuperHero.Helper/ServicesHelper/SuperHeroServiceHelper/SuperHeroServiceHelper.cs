@@ -13,7 +13,7 @@ namespace SuperHero.Helper
          _configuration = configuration;
       }
 
-      public async Task<string> RequestHelperAsync<T>(string url, string accessToken, string requestUri, T entity)
+      public async Task<string> HttpRequestHelperAsync<T>(string url, string accessToken, string requestUri, T entity)
       {
          if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(url))
          {

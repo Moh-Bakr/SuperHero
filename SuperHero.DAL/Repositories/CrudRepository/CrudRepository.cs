@@ -43,7 +43,7 @@ public class CrudRepository<T> : ICrudRepository<T> where T : class
       Expression<Func<T, object>> orderBy = null)
    {
       pageNumber = Math.Max(1, pageNumber);
-      pageSize = Math.Max(1, Math.Min(pageSize, 10));
+      pageSize = Math.Min(10, pageSize);
 
       IQueryable<T> query = _context.Set<T>();
 

@@ -4,7 +4,7 @@ using SuperHero.BAL;
 using SuperHero.BAL.Dtos;
 using SuperHero.Helper;
 
-namespace SuperHero.Core.Controllers;
+namespace SuperHero.Core.Controllers.AuthControllers;
 
 [Route("api/v1/[controller]")]
 [ApiController]
@@ -34,9 +34,10 @@ public class AuthController : ControllerBase
    public async Task<IActionResult> Login(LoginDto loginDto)
    {
       var loginResult = await _authService.LoginAsync(loginDto);
+      bool isSuccess = ResponseType.IsSuccessResponse(loginResult);
 
-      if (loginResult is null) return Unauthorized("Invalid Credentials");
+      if (isSuccess) return Ok(loginResult);
 
-      return Ok(loginResult);
+      return BadRequest(loginResult);
    }
 }

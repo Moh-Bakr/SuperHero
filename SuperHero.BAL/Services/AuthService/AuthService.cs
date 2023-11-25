@@ -45,7 +45,7 @@ public class AuthService : IAuthService
       await _userManager.CreateAsync(user, registerDto.Password);
       await _userManager.AddToRoleAsync(user, StaticUserRoles.User);
 
-      var successResponseJson = ResponseHelper.FluentValidationSuccessResponse("Registration successful");
+      var successResponseJson = ResponseHelper.FluentValidationSuccessResponse("Registered Successfully");
       return successResponseJson;
    }
 
@@ -59,10 +59,18 @@ public class AuthService : IAuthService
       }
 
       var user = await _userManager.FindByNameAsync(loginDto.UserName);
-      if (user is null) return null;
+      if (user is null)
+      {
+         var validationErrorJson = ResponseHelper.CustomErrorResponse("Invalid Credentials");
+         return validationErrorJson;
+      }
 
       var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
-      if (!result) return null;
+      if (!result)
+      {
+         var validationErrorJson = ResponseHelper.CustomErrorResponse("Invalid Credentials");
+         return validationErrorJson;
+      }
 
       var roles = await _userManager.GetRolesAsync(user);
 

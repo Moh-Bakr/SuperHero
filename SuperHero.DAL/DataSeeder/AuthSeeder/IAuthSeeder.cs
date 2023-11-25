@@ -1,6 +1,6 @@
 ﻿namespace SuperHero.DAL;
 
-public interface IRolesSeeder
+public interface IAuthSeeder
 {
    Task SeedRolesAsync();
 }
