@@ -16,6 +16,7 @@ Manage and organize your favorite superheroes with ease. Explore details, add to
     - [Data Models](#data-models)
 
 - [API Guide](#api)
+    - [Request Flow](#request-flow)
     - [API Overview](#api-details)
     - [Auth Details](#auth-details)
     - [Super Hero Details](#super-hero)
@@ -150,6 +151,16 @@ Here are the key fields of the table:
 - **ImageUrl:** The URL pointing to the image or avatar of the superhero.
 
 ## Api
+
+### Request Flow
+
+#### Sequence Diagram
+
+![Alt text](README/SquenceDiagram.png?raw=true)
+
+#### Services Diagram
+
+![Alt text](README/ServicesDiagram.png?raw=true)
 
 ### Api Details
 
