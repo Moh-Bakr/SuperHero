@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 
 namespace SuperHero.DAL
 {
-   public class RolesSeeder : IRolesSeeder
+   public class AuthSeeder : IAuthSeeder
    {
       private readonly RoleManager<IdentityRole> _roleManager;
 
-      public RolesSeeder(RoleManager<IdentityRole> roleManager)
+      public AuthSeeder(RoleManager<IdentityRole> roleManager)
       {
          _roleManager = roleManager;
       }

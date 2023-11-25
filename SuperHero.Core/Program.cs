@@ -51,7 +51,6 @@ builder.Services.AddAuthentication(options =>
 #region GenericRepositories
 
 builder.Services.AddScoped(typeof(ICrudRepository<>), typeof(CrudRepository<>));
-builder.Services.AddTransient(typeof(IResponseResult<>), typeof(ResponseResult<>));
 
 #endregion
 
@@ -95,7 +94,8 @@ builder.Services.AddTransient<IValidator<DeleteFavoriteListDto>, DeleteFavoriteL
 
 #region Database Seeder
 
-builder.Services.AddScoped<IRolesSeeder, RolesSeeder>();
+builder.Services.AddTransient<DataSeeder>();
+builder.Services.AddScoped<IAuthSeeder, AuthSeeder>();
 
 #endregion
 
@@ -105,6 +105,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 
 var app = builder.Build();
+
+#region SeedData Command
+
+if (args.Length == 1 && args[0].ToLower() == "seeddata")
+      SeedData(app);
+
+#endregion
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -119,5 +126,18 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+#region SeedData Function
+
+void SeedData(WebApplication app)
+{
+   using (var scope = app.Services.CreateScope())
+   {
+      var dataSeeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+      dataSeeder.SeedDataAsync().Wait();
+   }
+}
+
+#endregion
 
 app.Run();

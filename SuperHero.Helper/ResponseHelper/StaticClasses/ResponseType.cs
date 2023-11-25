@@ -12,6 +12,6 @@ public static class ResponseType
 
    private class IsSuccessResultType
    {
-      public bool IsSuccess { get; set; }
+      public bool IsSuccess { get; set; } = true;
    }
 }

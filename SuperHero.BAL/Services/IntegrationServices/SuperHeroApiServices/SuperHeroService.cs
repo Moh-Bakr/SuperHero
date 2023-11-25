@@ -37,7 +37,7 @@ public class SuperHeroService : ISuperHeroService
       var url = _configuration["SuperHeroApi:Api_Url"];
       string requestUri = $"{accessToken}/search/{searchDto.Name}";
 
-      var result = await _superHeroServiceHelper.RequestHelperAsync(url, accessToken, requestUri, searchDto);
+      var result = await _superHeroServiceHelper.HttpRequestHelperAsync(url, accessToken, requestUri, searchDto);
       return result;
    }
 
@@ -55,7 +55,7 @@ public class SuperHeroService : ISuperHeroService
       var url = _configuration["SuperHeroApi:Api_Url"];
       string requestUri = $"{accessToken}/{detailsDto.CharacterId}";
 
-      var result = await _superHeroServiceHelper.RequestHelperAsync(url, accessToken, requestUri, detailsDto);
+      var result = await _superHeroServiceHelper.HttpRequestHelperAsync(url, accessToken, requestUri, detailsDto);
       return result;
    }
 }

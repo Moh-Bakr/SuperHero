@@ -2,5 +2,5 @@
 
 public interface ISuperHeroServiceHelper
 {
-   Task<string> RequestHelperAsync<T>(string url, string accessToken, string requestUri, T entity);
+   Task<string> HttpRequestHelperAsync<T>(string url, string accessToken, string requestUri, T entity);
 }
